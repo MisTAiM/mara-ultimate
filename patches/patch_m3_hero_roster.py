@@ -911,7 +911,6 @@ def main():
         "CreateHeroRosterPanel()",
         "SwitchHero(",
         "ActiveHero",
-        "META_COMPS",
         "w1360",
     ])
 
