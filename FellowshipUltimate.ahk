@@ -3441,6 +3441,54 @@ UpdateStatusTip() {
 }
 
 
+; ============================================================================
+; VISUAL HELPERS — MODULE 5
+; ============================================================================
+ShowBigAlert(title, message, color := "8b0000", duration := 2500) {
+    alertGUI := Gui("+AlwaysOnTop -Caption +ToolWindow -DPIScale")
+    alertGUI.BackColor := color
+    alertGUI.SetFont("s18 bold cWhite")
+    alertGUI.Add("Text", "x10 y8 w680 Center", "💥 " title " 💥")
+    alertGUI.SetFont("s11 norm cWhite")
+    alertGUI.Add("Text", "x10 y42 w680 Center", message)
+    alertGUI.Show("w700 h75 NoActivate x" Round((A_ScreenWidth - 700) / 2) " y" (A_ScreenHeight - 120))
+    SetTimer(() => alertGUI.Destroy(), -duration)
+}
+
+GetGuileFlashColor() {
+    static tog := false
+    tog := !tog
+    return tog ? "ff8c00" : "ffd700"
+}
+
+GetPoisonArcText(remaining, maxDur, width := 12) {
+    filled := Round((remaining / maxDur) * width)
+    filled := Max(0, Min(width, filled))
+    bar := ""
+    Loop width {
+        bar .= (A_Index <= filled) ? "▓" : "░"
+    }
+    return "[" bar "]"
+}
+
+GetHeroThemeColor(heroName) {
+    colors := Map(
+        "Helena",  "4169e1",
+        "Meiko",   "20b2aa",
+        "Xavian",  "ffd700",
+        "Sylvie",  "90ee90",
+        "Vigour",  "ffd700",
+        "Aeona",   "87ceeb",
+        "Mara",    "8b00ff",
+        "Ardeos",  "ff4500",
+        "Rime",    "00bfff",
+        "Tariq",   "ffd700",
+        "Elarion", "9370db"
+    )
+    return colors.Has(heroName) ? colors[heroName] : "ffffff"
+}
+
+
 F1:: StartRotation("ST")
 F2:: StartRotation("AOE")
 F3:: PauseRotation()
