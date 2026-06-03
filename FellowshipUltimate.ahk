@@ -2575,8 +2575,16 @@ GetHeroIcon(heroName) {
 GetHeroRole(heroName) {
     tanks   := ["Helena","Meiko","Xavian"]
     healers := ["Sylvie","Vigour","Aeona"]
-    for h in tanks   { if h = heroName { return "Tank"   } }
-    for h in healers { if h = heroName { return "Healer" } }
+    for h in tanks {
+        if h = heroName {
+            return "Tank"
+        }
+    }
+    for h in healers {
+        if h = heroName {
+            return "Healer"
+        }
+    }
     return "DPS"
 }
 
