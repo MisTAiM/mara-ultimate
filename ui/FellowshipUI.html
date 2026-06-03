@@ -1,0 +1,2337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fellowship Ultimate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   FELLOWSHIP ULTIMATE — PREMIUM UI
+   Design Language: Void-Silk. Deep space darkness. Thread-gold accents.
+   Living light — everything breathes, pulses, reacts.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Core palette */
+  --void:        #020408;
+  --deep:        #060d14;
+  --surface:     #0b1520;
+  --glass:       rgba(255,255,255,0.03);
+  --glass-hover: rgba(255,255,255,0.06);
+  --border:      rgba(255,255,255,0.06);
+  --border-lit:  rgba(180,140,255,0.25);
+
+  /* Hero accent — Mara purple */
+  --accent:      #9b4dff;
+  --accent-dim:  rgba(155,77,255,0.15);
+  --accent-glow: rgba(155,77,255,0.4);
+
+  /* Gold */
+  --gold:        #f0c040;
+  --gold-dim:    rgba(240,192,64,0.15);
+  --gold-glow:   rgba(240,192,64,0.35);
+
+  /* Status */
+  --green:       #00e5a0;
+  --green-dim:   rgba(0,229,160,0.15);
+  --red:         #ff3860;
+  --red-dim:     rgba(255,56,96,0.15);
+  --orange:      #ff8c42;
+  --orange-dim:  rgba(255,140,66,0.15);
+  --blue:        #40a0ff;
+  --cyan:        #00d4ff;
+
+  /* Typography */
+  --font-display: 'Orbitron', monospace;
+  --font-ui:      'Rajdhani', sans-serif;
+  --font-mono:    'Share Tech Mono', monospace;
+
+  /* Spacing */
+  --gap-xs: 4px;
+  --gap-sm: 8px;
+  --gap-md: 14px;
+  --gap-lg: 20px;
+  --gap-xl: 28px;
+
+  /* Radii */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--void);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── ANIMATED BACKGROUND ──────────────────────────────────────────── */
+.bg-canvas {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+  animation: orb-drift 20s ease-in-out infinite alternate;
+}
+.bg-orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, #6020c0, transparent);
+  top: -200px; left: -100px;
+  animation-duration: 25s;
+}
+.bg-orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, #8b0000, transparent);
+  bottom: -100px; right: -50px;
+  animation-duration: 18s; animation-delay: -8s;
+}
+.bg-orb-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, #003060, transparent);
+  top: 50%; left: 50%;
+  animation-duration: 30s; animation-delay: -15s;
+}
+
+@keyframes orb-drift {
+  0%   { transform: translate(0,0) scale(1); }
+  33%  { transform: translate(40px,-60px) scale(1.1); }
+  66%  { transform: translate(-30px, 40px) scale(0.9); }
+  100% { transform: translate(20px,-20px) scale(1.05); }
+}
+
+/* Spider web SVG background */
+.bg-web {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; opacity: 0.04;
+}
+
+/* ── GRID NOISE OVERLAY ──────────────────────────────────────────── */
+.bg-noise {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.015) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.015) 40px);
+}
+
+/* ── MAIN LAYOUT ─────────────────────────────────────────────────── */
+.app {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-rows: 64px 1fr 36px;
+  grid-template-columns: 1fr;
+  height: 100vh;
+  gap: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   HEADER BAR
+   ═══════════════════════════════════════════════════════════════════ */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+  background: rgba(6,13,20,0.9);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%, var(--accent) 25%,
+    var(--gold) 50%, var(--accent) 75%, transparent 100%);
+  animation: header-scan 4s linear infinite;
+}
+
+@keyframes header-scan {
+  0%   { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.header-brand {
+  display: flex; align-items: center; gap: 12px;
+}
+
+.spider-logo {
+  width: 38px; height: 38px;
+  position: relative;
+}
+
+.brand-text {
+  display: flex; flex-direction: column; gap: 1px;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 15px; font-weight: 700;
+  letter-spacing: 0.15em;
+  background: linear-gradient(135deg, #fff 0%, var(--gold) 50%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+}
+
+.brand-sub {
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+}
+
+/* Center — DPS readout */
+.header-center {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+
+.dps-value {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--green);
+  text-shadow: 0 0 20px var(--green), 0 0 40px rgba(0,229,160,0.3);
+  transition: color 0.3s, text-shadow 0.3s;
+  line-height: 1;
+}
+
+.dps-value.warn  { color: var(--orange); text-shadow: 0 0 20px var(--orange); }
+.dps-value.crit  { color: var(--red);    text-shadow: 0 0 20px var(--red); }
+
+.dps-label {
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.4em;
+  color: rgba(255,255,255,0.25); text-transform: uppercase;
+}
+
+/* Right — status cluster */
+.header-right {
+  display: flex; align-items: center; gap: 16px;
+}
+
+.status-pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(0,229,160,0.08);
+  border: 1px solid rgba(0,229,160,0.2);
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.2em;
+  color: var(--green);
+  text-transform: uppercase;
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.status-pill.idle { 
+  background: rgba(255,255,255,0.04);
+  border-color: var(--border);
+  color: rgba(255,255,255,0.3);
+}
+.status-pill.idle .status-dot { 
+  background: rgba(255,255,255,0.2);
+  box-shadow: none; animation: none;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+.timer-display {
+  font-family: var(--font-mono);
+  font-size: 18px; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MAIN CONTENT AREA
+   ═══════════════════════════════════════════════════════════════════ */
+.content {
+  display: grid;
+  grid-template-columns: 280px 1fr 260px;
+  grid-template-rows: 1fr;
+  gap: 10px;
+  padding: 10px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LEFT COLUMN — RESOURCES + STEALTH + BUFFS
+   ═══════════════════════════════════════════════════════════════════ */
+.col-left {
+  display: flex; flex-direction: column; gap: 8px;
+  min-height: 0; overflow: hidden;
+}
+
+/* ── GLASS PANEL base ─────────────────────────────────────────────── */
+.panel {
+  background: rgba(11,21,32,0.7);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+}
+
+.panel-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-icon {
+  font-size: 13px;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.panel-title.accent { color: var(--accent); }
+.panel-title.gold   { color: var(--gold); }
+.panel-title.green  { color: var(--green); }
+
+.panel-body { padding: 10px 14px; }
+
+/* ── ENERGY SPHERE ─────────────────────────────────────────────────── */
+.resource-panel .panel-body {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+
+.arc-container {
+  position: relative; width: 160px; height: 100px;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+
+.arc-svg {
+  position: absolute; top: 0; left: 0;
+  width: 160px; height: 160px;
+  transform: translateY(-20px);
+}
+
+.arc-bg {
+  fill: none;
+  stroke: rgba(255,255,255,0.05);
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+.arc-fill {
+  fill: none;
+  stroke: url(#energyGrad);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 251;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.3s cubic-bezier(0.4,0,0.2,1);
+  filter: drop-shadow(0 0 6px var(--green));
+}
+
+.arc-fill.low    { stroke: url(#energyGradLow);  filter: drop-shadow(0 0 6px var(--red)); }
+.arc-fill.medium { stroke: url(#energyGradMid);  filter: drop-shadow(0 0 6px var(--orange)); }
+
+.arc-value {
+  font-family: var(--font-display);
+  font-size: 32px; font-weight: 800;
+  color: var(--green);
+  text-shadow: 0 0 20px var(--green);
+  line-height: 1;
+  z-index: 1;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+.arc-value.low    { color: var(--red);    text-shadow: 0 0 20px var(--red); }
+.arc-value.medium { color: var(--orange); text-shadow: 0 0 20px var(--orange); }
+
+.arc-label {
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.25);
+  margin-top: -4px;
+}
+
+/* CP row */
+.cp-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; width: 100%;
+}
+
+.cp-pip {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  border: 1px solid rgba(240,192,64,0.2);
+  background: rgba(240,192,64,0.04);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 11px; font-weight: 700;
+  color: rgba(240,192,64,0.2);
+  transition: all 0.15s;
+  position: relative;
+}
+
+.cp-pip.active {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+  color: var(--gold);
+  box-shadow: 0 0 10px var(--gold-glow), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.cp-pip.active.pulse {
+  animation: cp-pulse 0.3s ease-out;
+}
+
+@keyframes cp-pulse {
+  0%   { transform: scale(1.4); box-shadow: 0 0 20px var(--gold-glow); }
+  100% { transform: scale(1); }
+}
+
+/* Brooding charges */
+.charges-row {
+  display: flex; gap: 8px; width: 100%;
+  padding: 6px 0;
+}
+
+.charge-card {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: var(--r-sm);
+  background: rgba(155,77,255,0.06);
+  border: 1px solid rgba(155,77,255,0.15);
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+.charge-label {
+  font-family: var(--font-mono);
+  font-size: 8px; letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.3); text-transform: uppercase;
+}
+
+.charge-pips {
+  display: flex; gap: 3px;
+}
+
+.charge-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.2s;
+}
+
+.charge-dot.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 6px var(--accent-glow);
+}
+
+/* ── STEALTH ENGINE PANEL ─────────────────────────────────────────── */
+.stealth-state-display {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 12px 14px;
+  gap: 8px;
+}
+
+.stealth-orb {
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  background: rgba(155,77,255,0.05);
+  border: 2px solid rgba(155,77,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  position: relative;
+  transition: all 0.4s;
+}
+
+.stealth-orb.pending {
+  background: rgba(155,77,255,0.15);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow), 0 0 40px rgba(155,77,255,0.2);
+  animation: stealth-breathe 1.5s ease-in-out infinite;
+}
+
+.stealth-orb.consumed {
+  background: rgba(0,229,160,0.1);
+  border-color: var(--green);
+  box-shadow: 0 0 20px rgba(0,229,160,0.4);
+}
+
+@keyframes stealth-breathe {
+  0%,100% { transform: scale(1);    box-shadow: 0 0 20px var(--accent-glow); }
+  50%      { transform: scale(1.06); box-shadow: 0 0 35px var(--accent-glow), 0 0 60px rgba(155,77,255,0.2); }
+}
+
+.stealth-state-label {
+  font-family: var(--font-display);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  transition: color 0.3s;
+}
+
+.stealth-state-label.pending  { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
+.stealth-state-label.consumed { color: var(--green); }
+
+.stealth-window-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stealth-window-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #c080ff);
+  border-radius: 2px;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.stealth-next {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.1em;
+  color: var(--gold);
+}
+
+/* ── POISON TRACKER ─────────────────────────────────────────────── */
+.poison-row {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 10px 14px;
+}
+
+.poison-item {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.poison-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.poison-dot::after {
+  content: '';
+  position: absolute; inset: -2px;
+  border-radius: 50%;
+  background: inherit;
+  filter: blur(4px);
+  opacity: 0.5;
+}
+
+.poison-dot.seething  { background: var(--green); }
+.poison-dot.volatile  { background: var(--red); }
+.poison-dot.hemorrhage { background: #c04040; }
+
+.poison-info { flex: 1; }
+
+.poison-name {
+  font-family: var(--font-ui);
+  font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.05em;
+}
+
+.poison-bar-track {
+  height: 3px; margin-top: 3px;
+  background: rgba(255,255,255,0.05); border-radius: 2px;
+}
+
+.poison-bar-fill {
+  height: 100%; border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.poison-bar-fill.seething  { background: linear-gradient(90deg, var(--green), #80ffc8); box-shadow: 0 0 6px var(--green); }
+.poison-bar-fill.volatile  { background: linear-gradient(90deg, var(--red), #ff8060);   box-shadow: 0 0 6px var(--red); }
+.poison-bar-fill.hemorrhage { background: linear-gradient(90deg, #c04040, #ff6060);      box-shadow: 0 0 6px #c04040; }
+
+.poison-time {
+  font-family: var(--font-mono);
+  font-size: 10px; color: rgba(255,255,255,0.3);
+  min-width: 30px; text-align: right;
+}
+
+.poison-time.active { color: rgba(255,255,255,0.7); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   CENTER COLUMN — ABILITY PREVIEW + ROTATION QUEUE + BURST WINDOWS
+   ═══════════════════════════════════════════════════════════════════ */
+.col-center {
+  display: flex; flex-direction: column; gap: 8px;
+  min-height: 0; overflow: hidden;
+}
+
+/* ── NEXT ABILITY — THE HERO PIECE ─────────────────────────────── */
+.ability-showcase {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 0;
+  min-height: 130px;
+}
+
+.ability-art {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(155,77,255,0.05);
+  border-right: 1px solid var(--border);
+  border-radius: var(--r-lg) 0 0 var(--r-lg);
+  overflow: hidden;
+}
+
+.ability-art::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(155,77,255,0.2), transparent 70%);
+  animation: art-pulse 3s ease-in-out infinite;
+}
+
+@keyframes art-pulse {
+  0%,100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+
+.ability-emoji {
+  font-size: 52px;
+  filter: drop-shadow(0 0 12px rgba(155,77,255,0.6));
+  position: relative; z-index: 1;
+  animation: ability-float 3s ease-in-out infinite;
+  transition: all 0.3s;
+}
+
+@keyframes ability-float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+.ability-ring {
+  position: absolute; inset: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(155,77,255,0.2);
+  animation: ring-rotate 8s linear infinite;
+}
+
+@keyframes ring-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.ability-ring-2 {
+  position: absolute; inset: 16px;
+  border-radius: 50%;
+  border: 1px dashed rgba(240,192,64,0.1);
+  animation: ring-rotate 12s linear infinite reverse;
+}
+
+.ability-details {
+  padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 6px;
+  border-radius: 0 var(--r-lg) var(--r-lg) 0;
+}
+
+.ability-name {
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+
+.stealth-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(155,77,255,0.15);
+  border: 1px solid rgba(155,77,255,0.3);
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.2em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.ability-damage {
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+}
+
+.ability-reason {
+  font-family: var(--font-ui);
+  font-size: 11px; color: rgba(255,255,255,0.35);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.ability-cost {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto;
+}
+
+.cost-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cost-badge.energy {
+  background: rgba(0,229,160,0.1);
+  border: 1px solid rgba(0,229,160,0.2);
+  color: var(--green);
+}
+
+.cost-badge.cp {
+  background: rgba(240,192,64,0.1);
+  border: 1px solid rgba(240,192,64,0.2);
+  color: var(--gold);
+}
+
+.cost-badge.free {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── ROTATION QUEUE ──────────────────────────────────────────────── */
+.queue-panel {
+  flex-shrink: 0;
+}
+
+.queue-track {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.queue-track::-webkit-scrollbar { display: none; }
+
+.queue-item {
+  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  transition: all 0.2s;
+  min-width: 72px;
+  cursor: default;
+}
+
+.queue-item:first-child {
+  background: rgba(155,77,255,0.1);
+  border-color: rgba(155,77,255,0.3);
+  box-shadow: 0 0 16px rgba(155,77,255,0.15);
+}
+
+.queue-item-icon { font-size: 20px; line-height: 1; }
+
+.queue-item-name {
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  text-align: center; white-space: nowrap;
+}
+
+.queue-item:first-child .queue-item-name { color: var(--accent); }
+
+.queue-arrow {
+  color: rgba(255,255,255,0.1);
+  font-size: 14px; flex-shrink: 0;
+}
+
+/* ── BURST WINDOWS ───────────────────────────────────────────────── */
+.burst-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 10px 14px;
+}
+
+.burst-item {
+  padding: 8px 10px;
+  border-radius: var(--r-md);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 4px;
+  transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+
+.burst-item.active {
+  background: rgba(255,140,66,0.08);
+  border-color: rgba(255,140,66,0.3);
+  box-shadow: 0 0 12px rgba(255,140,66,0.1);
+}
+
+.burst-item.active::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--orange), var(--gold));
+  animation: burst-scan 1.5s linear infinite;
+}
+
+.burst-item.ready {
+  background: rgba(0,229,160,0.05);
+  border-color: rgba(0,229,160,0.2);
+}
+
+.burst-item.ready::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--green);
+}
+
+@keyframes burst-scan {
+  0%   { transform: scaleX(0); transform-origin: left; }
+  50%  { transform: scaleX(1); transform-origin: left; }
+  51%  { transform: scaleX(1); transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
+.burst-row {
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.burst-name {
+  font-family: var(--font-ui);
+  font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.05em;
+  display: flex; align-items: center; gap: 5px;
+}
+
+.burst-name .bicon { font-size: 12px; }
+
+.burst-value {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+}
+
+.burst-value.ready  { color: var(--green); text-shadow: 0 0 8px var(--green); }
+.burst-value.active { color: var(--orange); text-shadow: 0 0 8px var(--orange); }
+.burst-value.crit   { color: var(--red);    text-shadow: 0 0 8px var(--red); animation: text-flash 0.5s ease-in-out infinite alternate; }
+
+@keyframes text-flash {
+  from { opacity: 1; }
+  to   { opacity: 0.4; }
+}
+
+.burst-bar-track {
+  height: 2px; background: rgba(255,255,255,0.05); border-radius: 1px;
+}
+
+.burst-bar-fill {
+  height: 100%; border-radius: 1px; transition: width 0.3s ease;
+}
+
+/* ── PERFORMANCE METRICS ROW ──────────────────────────────────────── */
+.metrics-row {
+  flex: 1; min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.metric-card {
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 4px;
+  position: relative; overflow: hidden;
+}
+
+.metric-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: var(--accent); opacity: 0.3;
+}
+
+.metric-value {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+.metric-label {
+  font-family: var(--font-mono);
+  font-size: 8px; letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.2); text-transform: uppercase;
+}
+
+.metric-sub {
+  font-family: var(--font-mono);
+  font-size: 9px; color: rgba(255,255,255,0.25);
+}
+
+/* ── MALEVOLENCE ─────────────────────────────────────────────────── */
+.mal-panel .panel-body {
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.mal-item {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.mal-stars {
+  display: flex; gap: 3px;
+}
+
+.mal-star {
+  font-size: 14px;
+  color: rgba(240,192,64,0.15);
+  transition: all 0.3s;
+  filter: none;
+}
+
+.mal-star.active {
+  color: var(--gold);
+  text-shadow: 0 0 8px var(--gold-glow);
+  animation: star-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes star-glow {
+  from { text-shadow: 0 0 8px var(--gold-glow); }
+  to   { text-shadow: 0 0 16px var(--gold-glow), 0 0 30px rgba(240,192,64,0.2); }
+}
+
+.mal-info { flex: 1; }
+
+.mal-name {
+  font-family: var(--font-ui);
+  font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,0.6);
+}
+
+.mal-timer-bar {
+  height: 2px; margin-top: 3px;
+  background: rgba(255,255,255,0.05); border-radius: 1px;
+}
+
+.mal-timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), #fff8a0);
+  border-radius: 1px; transition: width 0.1s;
+  box-shadow: 0 0 4px var(--gold);
+}
+
+.mal-mult {
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RIGHT COLUMN — HERO ROSTER
+   ═══════════════════════════════════════════════════════════════════ */
+.col-right {
+  display: flex; flex-direction: column; gap: 8px;
+  min-height: 0; overflow: hidden;
+}
+
+.active-hero-card {
+  padding: 14px;
+  border-radius: var(--r-lg);
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, rgba(155,77,255,0.15), rgba(139,0,0,0.1));
+  border: 1px solid rgba(155,77,255,0.25);
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.active-hero-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at top left, rgba(155,77,255,0.15), transparent 60%);
+}
+
+.active-hero-top {
+  display: flex; align-items: center; gap: 10px; position: relative; z-index: 1;
+}
+
+.active-hero-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--r-md);
+  background: rgba(155,77,255,0.2);
+  border: 1px solid rgba(155,77,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 0 16px rgba(155,77,255,0.3);
+}
+
+.active-hero-info { flex: 1; }
+
+.active-hero-name {
+  font-family: var(--font-display);
+  font-size: 15px; font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #fff;
+}
+
+.active-hero-role {
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.3em;
+  color: rgba(155,77,255,0.7); text-transform: uppercase;
+}
+
+.hero-resource-bar {
+  position: relative; z-index: 1;
+}
+
+.hero-res-label {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.25); margin-bottom: 4px;
+}
+
+.hero-res-track {
+  height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px;
+}
+
+.hero-res-fill {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), #c080ff);
+  box-shadow: 0 0 8px var(--accent-glow);
+  transition: width 0.3s;
+}
+
+/* Hero roster grid */
+.roster-panel .panel-body { padding: 8px 10px; }
+
+.roster-section-label {
+  font-family: var(--font-mono);
+  font-size: 8px; letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.15); text-transform: uppercase;
+  padding: 4px 0 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  margin-bottom: 4px;
+}
+
+.roster-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.hero-btn {
+  padding: 6px 4px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.hero-btn:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-1px);
+}
+
+.hero-btn.active {
+  border-color: var(--hero-color, var(--accent));
+  background: rgba(var(--hero-color-rgb, 155,77,255), 0.1);
+  box-shadow: 0 0 10px rgba(var(--hero-color-rgb, 155,77,255), 0.2);
+}
+
+.hero-btn-icon { font-size: 16px; line-height: 1; }
+
+.hero-btn-name {
+  font-family: var(--font-mono);
+  font-size: 8px; letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+}
+
+.hero-btn.active .hero-btn-name { color: rgba(255,255,255,0.7); }
+
+/* Party comp */
+.party-display {
+  padding: 6px 0;
+  display: flex; flex-direction: column; gap: 3px;
+}
+
+.party-member {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 6px;
+  border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.02);
+}
+
+.party-member-icon { font-size: 13px; }
+
+.party-member-name {
+  font-family: var(--font-ui);
+  font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,0.5);
+}
+
+.party-member-role {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 8px; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+}
+
+/* ── HERO NOTES ─────────────────────────────────────────────────── */
+.hero-notes {
+  padding: 8px 10px;
+  font-family: var(--font-ui);
+  font-size: 10px; line-height: 1.5;
+  color: rgba(255,255,255,0.3);
+  font-weight: 500;
+  border-top: 1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FOOTER BAR
+   ═══════════════════════════════════════════════════════════════════ */
+.footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+  background: rgba(6,13,20,0.95);
+  border-top: 1px solid var(--border);
+}
+
+.footer-controls {
+  display: flex; gap: 6px;
+}
+
+.ctrl-btn {
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  transition: all 0.15s;
+  display: flex; align-items: center; gap: 4px;
+}
+
+.ctrl-btn:hover { background: rgba(255,255,255,0.07); color: #fff; border-color: rgba(255,255,255,0.2); }
+
+.ctrl-btn.start {
+  background: rgba(0,229,160,0.08);
+  border-color: rgba(0,229,160,0.25);
+  color: var(--green);
+}
+
+.ctrl-btn.start:hover {
+  background: rgba(0,229,160,0.15);
+  box-shadow: 0 0 10px rgba(0,229,160,0.15);
+}
+
+.ctrl-btn.stop {
+  background: rgba(255,56,96,0.08);
+  border-color: rgba(255,56,96,0.2);
+  color: var(--red);
+}
+
+.ctrl-btn.stop:hover { background: rgba(255,56,96,0.15); }
+
+.footer-tip {
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.15);
+  text-align: center; flex: 1;
+}
+
+.footer-version {
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.1); text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ALERT OVERLAY
+   ═══════════════════════════════════════════════════════════════════ */
+.alert-overlay {
+  position: fixed; bottom: 50px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  min-width: 420px;
+  padding: 14px 24px;
+  border-radius: var(--r-lg);
+  background: rgba(10,15,25,0.95);
+  border: 1px solid rgba(155,77,255,0.4);
+  box-shadow: 0 0 40px rgba(155,77,255,0.3), 0 20px 60px rgba(0,0,0,0.6);
+  backdrop-filter: blur(20px);
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+  text-align: center;
+}
+
+.alert-overlay.visible {
+  opacity: 1; transform: translateX(-50%) translateY(0);
+}
+
+.alert-overlay.maiden {
+  border-color: rgba(255,56,96,0.5);
+  box-shadow: 0 0 40px rgba(255,56,96,0.3), 0 20px 60px rgba(0,0,0,0.6);
+}
+
+.alert-overlay.guile {
+  border-color: rgba(255,140,66,0.5);
+  box-shadow: 0 0 40px rgba(255,140,66,0.3), 0 20px 60px rgba(0,0,0,0.6);
+}
+
+.alert-title {
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 800;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  background: linear-gradient(135deg, #fff, var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.alert-sub {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.4); margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   HEMOTOXIN DETONATION WARNING
+   ═══════════════════════════════════════════════════════════════════ */
+.hemotoxin-warning {
+  position: fixed; top: 80px; right: 280px;
+  padding: 8px 16px;
+  border-radius: var(--r-md);
+  background: rgba(255,0,255,0.1);
+  border: 1px solid rgba(255,0,255,0.4);
+  box-shadow: 0 0 20px rgba(255,0,255,0.2);
+  font-family: var(--font-display);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: #ff80ff;
+  display: flex; align-items: center; gap: 8px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 50;
+}
+
+.hemotoxin-warning.visible { opacity: 1; }
+.hemotoxin-warning.panic   { animation: hemo-panic 0.3s ease-in-out infinite alternate; }
+
+@keyframes hemo-panic {
+  from { box-shadow: 0 0 20px rgba(255,0,255,0.2); }
+  to   { box-shadow: 0 0 30px rgba(255,0,0,0.5), 0 0 50px rgba(255,0,0,0.3); border-color: rgba(255,0,0,0.6); color: #ff4040; }
+}
+
+.hemo-dots {
+  display: flex; gap: 2px;
+}
+
+.hemo-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,0,255,0.2);
+  transition: all 0.2s;
+}
+
+.hemo-dot.active { background: #ff00ff; box-shadow: 0 0 6px #ff00ff; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<!-- Background layers -->
+<div class="bg-canvas">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+</div>
+<div class="bg-noise"></div>
+
+<!-- Spider web SVG background -->
+<svg class="bg-web" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+  <g stroke="rgba(180,140,255,1)" stroke-width="0.5" fill="none">
+    <!-- Concentric rings from center -->
+    <ellipse cx="700" cy="450" rx="80" ry="50"/>
+    <ellipse cx="700" cy="450" rx="160" ry="100"/>
+    <ellipse cx="700" cy="450" rx="260" ry="165"/>
+    <ellipse cx="700" cy="450" rx="380" ry="240"/>
+    <ellipse cx="700" cy="450" rx="520" ry="330"/>
+    <ellipse cx="700" cy="450" rx="680" ry="430"/>
+    <!-- Radial spokes -->
+    <line x1="700" y1="450" x2="700" y2="20"/>
+    <line x1="700" y1="450" x2="1110" y2="185"/>
+    <line x1="700" y1="450" x2="1250" y2="575"/>
+    <line x1="700" y1="450" x2="1000" y2="880"/>
+    <line x1="700" y1="450" x2="400" y2="880"/>
+    <line x1="700" y1="450" x2="150" y2="575"/>
+    <line x1="700" y1="450" x2="290" y2="185"/>
+    <line x1="700" y1="450" x2="700" y2="880"/>
+    <line x1="700" y1="450" x2="1250" y2="450"/>
+    <line x1="700" y1="450" x2="150" y2="450"/>
+  </g>
+</svg>
+
+<!-- Hemotoxin warning -->
+<div class="hemotoxin-warning" id="hemotoxinWarning">
+  <div class="hemo-dots" id="hemoDots">
+    <div class="hemo-dot" id="hd1"></div>
+    <div class="hemo-dot" id="hd2"></div>
+    <div class="hemo-dot" id="hd3"></div>
+    <div class="hemo-dot" id="hd4"></div>
+    <div class="hemo-dot" id="hd5"></div>
+  </div>
+  <span id="hemotoxinText">HEMOTOXIN — DETONATE!</span>
+  <span id="hemotoxinTimer">9.0s</span>
+</div>
+
+<!-- Alert overlay -->
+<div class="alert-overlay" id="alertOverlay">
+  <div class="alert-title" id="alertTitle">MAIDEN OF DEATH</div>
+  <div class="alert-sub" id="alertSub">BURST WINDOW ACTIVE</div>
+</div>
+
+<!-- Main app -->
+<div class="app">
+
+  <!-- ── HEADER ──────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-brand">
+      <!-- Spider logo SVG -->
+      <svg class="spider-logo" viewBox="0 0 38 38" fill="none">
+        <circle cx="19" cy="19" r="18" stroke="rgba(155,77,255,0.3)" stroke-width="1"/>
+        <circle cx="19" cy="19" r="8" fill="rgba(155,77,255,0.2)" stroke="rgba(155,77,255,0.6)" stroke-width="1.5"/>
+        <circle cx="19" cy="19" r="3" fill="#9b4dff"/>
+        <!-- Legs -->
+        <line x1="19" y1="11" x2="12" y2="4"  stroke="rgba(155,77,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="19" y1="11" x2="26" y2="4"  stroke="rgba(155,77,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="11" y1="19" x2="2"  y2="14" stroke="rgba(155,77,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="11" y1="19" x2="2"  y2="24" stroke="rgba(155,77,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="27" y1="19" x2="36" y2="14" stroke="rgba(155,77,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="27" y1="19" x2="36" y2="24" stroke="rgba(155,77,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="19" y1="27" x2="12" y2="34" stroke="rgba(155,77,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="19" y1="27" x2="26" y2="34" stroke="rgba(155,77,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div class="brand-text">
+        <div class="brand-name">FELLOWSHIP ULTIMATE</div>
+        <div class="brand-sub">v6.0 · Spider's Web Edition</div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="dps-value" id="dpsValue">0 DPS</div>
+      <div class="dps-label">Estimated Damage / Sec</div>
+    </div>
+
+    <div class="header-right">
+      <div class="timer-display" id="timerDisplay">0:00</div>
+      <div class="status-pill idle" id="statusPill">
+        <div class="status-dot"></div>
+        <span id="statusText">READY</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── MAIN CONTENT ────────────────────────────────────────────── -->
+  <main class="content">
+
+    <!-- LEFT COLUMN -->
+    <div class="col-left">
+
+      <!-- Energy + CP -->
+      <div class="panel resource-panel">
+        <div class="panel-header">
+          <span class="panel-icon">⚡</span>
+          <span class="panel-title green">RESOURCES</span>
+        </div>
+        <div class="panel-body">
+          <div class="arc-container">
+            <svg class="arc-svg" viewBox="0 0 160 160">
+              <defs>
+                <linearGradient id="energyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#00c080"/>
+                  <stop offset="100%" stop-color="#00e5a0"/>
+                </linearGradient>
+                <linearGradient id="energyGradMid" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ff6020"/>
+                  <stop offset="100%" stop-color="#ff8c42"/>
+                </linearGradient>
+                <linearGradient id="energyGradLow" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#c01030"/>
+                  <stop offset="100%" stop-color="#ff3860"/>
+                </linearGradient>
+              </defs>
+              <!-- Background arc — 200deg half circle -->
+              <path class="arc-bg" d="M 30 130 A 65 65 0 1 1 130 130"
+                stroke="rgba(255,255,255,0.05)" stroke-width="10" fill="none" stroke-linecap="round"/>
+              <!-- Fill arc -->
+              <path class="arc-fill" id="energyArc"
+                d="M 30 130 A 65 65 0 1 1 130 130"
+                stroke="url(#energyGrad)" stroke-width="10" fill="none" stroke-linecap="round"
+                stroke-dasharray="283" stroke-dashoffset="0"/>
+            </svg>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;z-index:1;margin-bottom:4px;">
+              <div class="arc-value" id="energyValue">200</div>
+              <div class="arc-label" id="energyMax">/ 200 ENERGY</div>
+            </div>
+          </div>
+
+          <!-- CP pips -->
+          <div class="cp-row" id="cpRow">
+            <div class="cp-pip" id="cp1">1</div>
+            <div class="cp-pip" id="cp2">2</div>
+            <div class="cp-pip" id="cp3">3</div>
+            <div class="cp-pip" id="cp4">4</div>
+            <div class="cp-pip" id="cp5">5</div>
+            <div class="cp-pip" id="cp6">6</div>
+          </div>
+
+          <!-- Brooding charges -->
+          <div class="charges-row">
+            <div class="charge-card">
+              <div class="charge-label">Brooding</div>
+              <div class="charge-pips">
+                <div class="charge-dot active" id="brood1"></div>
+                <div class="charge-dot active" id="brood2"></div>
+              </div>
+            </div>
+            <div class="charge-card">
+              <div class="charge-label">Widow CD</div>
+              <div class="charge-pips">
+                <div class="charge-dot active" id="widow1"></div>
+                <div class="charge-dot" id="widow2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stealth Engine -->
+      <div class="panel stealth-panel">
+        <div class="panel-header">
+          <span class="panel-icon">🌑</span>
+          <span class="panel-title accent">STEALTH ENGINE</span>
+        </div>
+        <div class="stealth-state-display">
+          <div class="stealth-orb" id="stealthOrb">🕷️</div>
+          <div class="stealth-state-label" id="stealthLabel">NONE</div>
+          <div class="stealth-window-bar">
+            <div class="stealth-window-fill" id="stealthWindowFill" style="width:0%"></div>
+          </div>
+          <div class="stealth-next" id="stealthNext">—</div>
+        </div>
+      </div>
+
+      <!-- Poison Tracker -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-icon">☠️</span>
+          <span class="panel-title">POISON TRACKER</span>
+        </div>
+        <div class="poison-row">
+          <div class="poison-item">
+            <div class="poison-dot seething"></div>
+            <div class="poison-info">
+              <div class="poison-name">Seething — Predator's Rush</div>
+              <div class="poison-bar-track">
+                <div class="poison-bar-fill seething" id="seethingBar" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="poison-time" id="seethingTime">—</div>
+          </div>
+          <div class="poison-item">
+            <div class="poison-dot volatile"></div>
+            <div class="poison-info">
+              <div class="poison-name">Volatile — AoE Explosion</div>
+              <div class="poison-bar-track">
+                <div class="poison-bar-fill volatile" id="volatileBar" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="poison-time" id="volatileTime">—</div>
+          </div>
+          <div class="poison-item">
+            <div class="poison-dot hemorrhage"></div>
+            <div class="poison-info">
+              <div class="poison-name">Hemorrhage — +3 Energy/tick</div>
+              <div class="poison-bar-track">
+                <div class="poison-bar-fill hemorrhage" id="hemBar" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="poison-time" id="hemTime">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Malevolence -->
+      <div class="panel mal-panel">
+        <div class="panel-header">
+          <span class="panel-icon">⭐</span>
+          <span class="panel-title gold">MALEVOLENCE</span>
+        </div>
+        <div class="panel-body">
+          <div class="mal-item">
+            <div class="mal-stars">
+              <span class="mal-star" id="qfStar1">★</span>
+              <span class="mal-star" id="qfStar2">★</span>
+            </div>
+            <div class="mal-info">
+              <div class="mal-name">Queen's Fang</div>
+              <div class="mal-timer-bar">
+                <div class="mal-timer-fill" id="qfBar" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="mal-mult" id="qfMult">×1</div>
+          </div>
+          <div class="mal-item" style="margin-top:6px">
+            <div class="mal-stars">
+              <span class="mal-star" id="aaStar1">★</span>
+              <span class="mal-star" id="aaStar2">★</span>
+            </div>
+            <div class="mal-info">
+              <div class="mal-name">Arachnid Assault</div>
+              <div class="mal-timer-bar">
+                <div class="mal-timer-fill" id="aaBar" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="mal-mult" id="aaMult">×1</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /col-left -->
+
+    <!-- CENTER COLUMN -->
+    <div class="col-center">
+
+      <!-- Next Ability Showcase -->
+      <div class="panel ability-showcase">
+        <div class="ability-art">
+          <div class="ability-ring"></div>
+          <div class="ability-ring-2"></div>
+          <div class="ability-emoji" id="abilityEmoji">⚔️</div>
+        </div>
+        <div class="ability-details">
+          <div class="ability-name" id="abilityName">Waiting...</div>
+          <div id="stealthTag"></div>
+          <div class="ability-damage" id="abilityDamage">—</div>
+          <div class="ability-reason" id="abilityReason">Configure rotation and press Start</div>
+          <div class="ability-cost" id="abilityCost"></div>
+        </div>
+      </div>
+
+      <!-- Rotation Queue -->
+      <div class="panel queue-panel">
+        <div class="panel-header">
+          <span class="panel-icon">📜</span>
+          <span class="panel-title">ROTATION QUEUE</span>
+        </div>
+        <div class="queue-track" id="queueTrack">
+          <!-- JS populated -->
+        </div>
+      </div>
+
+      <!-- Burst Windows -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-icon">🔥</span>
+          <span class="panel-title">BURST WINDOWS</span>
+        </div>
+        <div class="burst-grid">
+          <!-- Maiden -->
+          <div class="burst-item" id="burst-maiden">
+            <div class="burst-row">
+              <div class="burst-name"><span class="bicon">👑</span>Maiden of Death</div>
+              <div class="burst-value ready" id="maidenVal">READY</div>
+            </div>
+            <div class="burst-bar-track">
+              <div class="burst-bar-fill" id="maidenBar" style="width:100%;background:var(--green)"></div>
+            </div>
+          </div>
+          <!-- Guile -->
+          <div class="burst-item" id="burst-guile">
+            <div class="burst-row">
+              <div class="burst-name"><span class="bicon">⚡</span>Assassin's Guile</div>
+              <div class="burst-value" id="guileVal">Inactive</div>
+            </div>
+            <div class="burst-bar-track">
+              <div class="burst-bar-fill" id="guileBar" style="width:0%;background:var(--orange)"></div>
+            </div>
+          </div>
+          <!-- Weapon -->
+          <div class="burst-item" id="burst-weapon">
+            <div class="burst-row">
+              <div class="burst-name"><span class="bicon">⚔️</span>Weapon Ability</div>
+              <div class="burst-value ready" id="weaponVal">READY</div>
+            </div>
+            <div class="burst-bar-track">
+              <div class="burst-bar-fill" id="weaponBar" style="width:100%;background:var(--blue)"></div>
+            </div>
+          </div>
+          <!-- Final Stratagem -->
+          <div class="burst-item" id="burst-final">
+            <div class="burst-row">
+              <div class="burst-name"><span class="bicon">💥</span>Final Stratagem</div>
+              <div class="burst-value crit" id="finalVal">READY</div>
+            </div>
+            <div class="burst-bar-track">
+              <div class="burst-bar-fill" id="finalBar" style="width:100%;background:var(--red)"></div>
+            </div>
+          </div>
+          <!-- Deadly Scheme -->
+          <div class="burst-item" id="burst-scheme">
+            <div class="burst-row">
+              <div class="burst-name"><span class="bicon">💀</span>Deadly Scheme</div>
+              <div class="burst-value" id="schemeVal">0/200</div>
+            </div>
+            <div class="burst-bar-track">
+              <div class="burst-bar-fill" id="schemeBar" style="width:0%;background:#ff00ff"></div>
+            </div>
+          </div>
+          <!-- Hemotoxin -->
+          <div class="burst-item" id="burst-hemo">
+            <div class="burst-row">
+              <div class="burst-name"><span class="bicon">🧪</span>Hemotoxin</div>
+              <div class="burst-value" id="hemoVal">0 stacks</div>
+            </div>
+            <div class="burst-bar-track">
+              <div class="burst-bar-fill" id="hemoBar" style="width:0%;background:#ff00ff"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Metrics -->
+      <div class="metrics-row">
+        <div class="metric-card">
+          <div class="metric-value" id="metricDPS">0</div>
+          <div class="metric-label">DPS</div>
+          <div class="metric-sub" id="metricDmg">0 total dmg</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="metricCasts">0</div>
+          <div class="metric-label">Casts</div>
+          <div class="metric-sub" id="metricCPM">0 CPM</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="metricGuile">0</div>
+          <div class="metric-label">Guile Windows</div>
+          <div class="metric-sub" id="metricStealth">0 stealth uses</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" id="metricWaste">0%</div>
+          <div class="metric-label">Waste</div>
+          <div class="metric-sub" id="metricEfficiency">Efficiency: —</div>
+        </div>
+      </div>
+
+    </div><!-- /col-center -->
+
+    <!-- RIGHT COLUMN -->
+    <div class="col-right">
+
+      <!-- Active Hero -->
+      <div class="active-hero-card">
+        <div class="active-hero-top">
+          <div class="active-hero-icon" id="activeHeroIcon">🕷️</div>
+          <div class="active-hero-info">
+            <div class="active-hero-name" id="activeHeroName">MARA</div>
+            <div class="active-hero-role" id="activeHeroRole">DPS · ASSASSIN</div>
+          </div>
+        </div>
+        <div class="hero-resource-bar">
+          <div class="hero-res-label">
+            <span id="heroResName">Energy</span>
+            <span id="heroResValue">200/200</span>
+          </div>
+          <div class="hero-res-track">
+            <div class="hero-res-fill" id="heroResBar" style="width:100%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Roster -->
+      <div class="panel roster-panel" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
+        <div class="panel-header">
+          <span class="panel-icon">🎮</span>
+          <span class="panel-title">HERO ROSTER</span>
+        </div>
+        <div class="panel-body" style="flex:1;overflow-y:auto;padding:8px 10px;">
+
+          <div class="roster-section-label">— Tanks —</div>
+          <div class="roster-grid">
+            <button class="hero-btn" onclick="selectHero('Helena')" id="btn-Helena" style="--hero-color:#4169e1;--hero-color-rgb:65,105,225">
+              <div class="hero-btn-icon">🛡️</div>
+              <div class="hero-btn-name">Helena</div>
+            </button>
+            <button class="hero-btn" onclick="selectHero('Meiko')" id="btn-Meiko" style="--hero-color:#20b2aa;--hero-color-rgb:32,178,170">
+              <div class="hero-btn-icon">🥋</div>
+              <div class="hero-btn-name">Meiko</div>
+            </button>
+            <button class="hero-btn" onclick="selectHero('Xavian')" id="btn-Xavian" style="--hero-color:#ffd700;--hero-color-rgb:255,215,0">
+              <div class="hero-btn-icon">✨</div>
+              <div class="hero-btn-name">Xavian</div>
+            </button>
+          </div>
+
+          <div class="roster-section-label">— Healers —</div>
+          <div class="roster-grid">
+            <button class="hero-btn" onclick="selectHero('Sylvie')" id="btn-Sylvie" style="--hero-color:#90ee90;--hero-color-rgb:144,238,144">
+              <div class="hero-btn-icon">🦋</div>
+              <div class="hero-btn-name">Sylvie</div>
+            </button>
+            <button class="hero-btn" onclick="selectHero('Vigour')" id="btn-Vigour" style="--hero-color:#ffd700;--hero-color-rgb:255,215,0">
+              <div class="hero-btn-icon">⚡</div>
+              <div class="hero-btn-name">Vigour</div>
+            </button>
+            <button class="hero-btn" onclick="selectHero('Aeona')" id="btn-Aeona" style="--hero-color:#87ceeb;--hero-color-rgb:135,206,235">
+              <div class="hero-btn-icon">🌟</div>
+              <div class="hero-btn-name">Aeona</div>
+            </button>
+          </div>
+
+          <div class="roster-section-label">— DPS —</div>
+          <div class="roster-grid">
+            <button class="hero-btn active" onclick="selectHero('Mara')" id="btn-Mara" style="--hero-color:#9b4dff;--hero-color-rgb:155,77,255">
+              <div class="hero-btn-icon">🕷️</div>
+              <div class="hero-btn-name">Mara</div>
+            </button>
+            <button class="hero-btn" onclick="selectHero('Ardeos')" id="btn-Ardeos" style="--hero-color:#ff4500;--hero-color-rgb:255,69,0">
+              <div class="hero-btn-icon">🔥</div>
+              <div class="hero-btn-name">Ardeos</div>
+            </button>
+            <button class="hero-btn" onclick="selectHero('Rime')" id="btn-Rime" style="--hero-color:#00bfff;--hero-color-rgb:0,191,255">
+              <div class="hero-btn-icon">❄️</div>
+              <div class="hero-btn-name">Rime</div>
+            </button>
+            <button class="hero-btn" onclick="selectHero('Tariq')" id="btn-Tariq" style="--hero-color:#ffd700;--hero-color-rgb:255,215,0">
+              <div class="hero-btn-icon">⚡</div>
+              <div class="hero-btn-name">Tariq</div>
+            </button>
+            <button class="hero-btn" onclick="selectHero('Elarion')" id="btn-Elarion" style="--hero-color:#9370db;--hero-color-rgb:147,112,219">
+              <div class="hero-btn-icon">🏹</div>
+              <div class="hero-btn-name">Elarion</div>
+            </button>
+          </div>
+
+          <div class="roster-section-label" style="margin-top:6px">— Party —</div>
+          <div class="party-display" id="partyDisplay">
+            <div class="party-member"><span class="party-member-icon">🥋</span><span class="party-member-name">Meiko</span><span class="party-member-role">Tank</span></div>
+            <div class="party-member"><span class="party-member-icon">⚡</span><span class="party-member-name">Vigour</span><span class="party-member-role">Healer</span></div>
+            <div class="party-member"><span class="party-member-icon">🕷️</span><span class="party-member-name">Mara</span><span class="party-member-role">DPS</span></div>
+            <div class="party-member"><span class="party-member-icon">🏹</span><span class="party-member-name">Elarion</span><span class="party-member-role">DPS</span></div>
+          </div>
+
+        </div>
+        <div class="hero-notes" id="heroNotes">
+          Seething Poison = +40% Energy Regen. Never let it drop. Brooding → Widow's Bite for opener.
+        </div>
+      </div>
+
+    </div><!-- /col-right -->
+
+  </main><!-- /content -->
+
+  <!-- ── FOOTER ──────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-controls">
+      <button class="ctrl-btn start" onclick="sendCmd('START_ST')">▶ F1 ST</button>
+      <button class="ctrl-btn start" onclick="sendCmd('START_AOE')">⟳ F2 AOE</button>
+      <button class="ctrl-btn" onclick="sendCmd('PAUSE')">⏸ F3</button>
+      <button class="ctrl-btn stop" onclick="sendCmd('STOP')">⏹ F4</button>
+      <button class="ctrl-btn" onclick="sendCmd('RESET')">↺ RESET</button>
+    </div>
+    <div class="footer-tip" id="footerTip">Seething Poison = +40% Energy Regen. Never let it drop.</div>
+    <div class="footer-version">Fellowship Ultimate v6.0</div>
+  </footer>
+
+</div><!-- /app -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// STATE ENGINE — reads fellowship_state.json every 100ms
+// ═══════════════════════════════════════════════════════════════════
+
+const STATE_FILE = 'fellowship_state.json'
+const CMD_FILE   = 'fellowship_cmd.txt'
+let   state      = {}
+let   prevCP     = 0
+let   alertTimer = null
+
+const ABILITY_ICONS = {
+  QueensFang:'👑', ArachnidAssault:'🕷️', HemorrhagingStrike:'💀',
+  Backstab:'🗡️', WidowsBite:'🕸️', SkitteringBlades:'🌀',
+  MaidenOfDeath:'👸', BroodingShadows:'🌑', WeaponAbility:'⚔️',
+  FinalStratagem:'💥', ShadowProtection:'🛡️', StalkerStep:'💨',
+  ShieldsUp:'🛡️', ShieldSlam:'⚔️', Shockwave:'💥', Siegebreaker:'🏆',
+  RadiantBlast:'⚡', HolyMend:'✨', GlacialBlast:'❄️', IceAge:'🌨️',
+  ThunderCall:'⚡', Detonate:'🔥', SearingBlaze:'🔥',
+  HeartseekerBarrage:'🏹', LunarlightMark:'🌙', Nettlebolt:'🌿',
+  PalmStrike:'🥋', BrilliantFlash:'✨', default:'⚔️'
+}
+
+const ABILITY_SHORT = {
+  QueensFang:"Queen's Fang", ArachnidAssault:"Arachnid", HemorrhagingStrike:"Hemorrhage",
+  Backstab:"Backstab", WidowsBite:"Widow's Bite", SkitteringBlades:"Skittering",
+  MaidenOfDeath:"MAIDEN", BroodingShadows:"Brooding", WeaponAbility:"Weapon",
+  FinalStratagem:"FINAL STRAT", ShadowProtection:"Shadow Prot"
+}
+
+const HERO_NOTES = {
+  Helena: "Shields Up when Toughness <40%. Shockwave for double CDR. Siegebreaker for heavy phases.",
+  Meiko:  "Palm→Kick→Fist combo chain into finishers. Maintain Spirited Strikes. TwinSouls emergency.",
+  Xavian: "AuraOfSolace always active. Stack Swift Reprival. ShiningHalo for party heals.",
+  Sylvie: "Nettlebolt → LifePetal CDR. Deploy Flutterflies constantly. BloomBurst at 4+ stacks.",
+  Vigour: "Deal damage → generate Runes → heal. Overcharge for AoE burst. Never stop attacking.",
+  Aeona:  "DelayedImpact before spikes. Monitor mana carefully. StarShield preemptively.",
+  Mara:   "Brooding→stealth→Widow's Bite = Seething Poison (+40% Regen). Guile window = spam finishers.",
+  Ardeos: "Stack DoTs FIRST, then Detonate. Never Detonate with 0 DoTs. Save 4 Embers for Combustion.",
+  Rime:   "Pre-spend Orbs before IceAge. Avoid overcapping. WinterBlessing for group heal support.",
+  Tariq:  "LightningBolt proc = instant use. Build to 70+ Fury before ThunderCall. Swing Timer.",
+  Elarion:"LunarlightMark FIRST, then HeartseekerBarrage to trigger. Impend for party DPS buff."
+}
+
+const TIPS = [
+  "Seething Poison = +40% Energy Regen (Predator's Rush). Never let it drop.",
+  "Assassin's Guile: 5s window — pack 4 finishers. Alternate QF/AA for Malevolence stacks.",
+  "Brooding from stealth: Widow's=Seething, Backstab=Caustic(+6CP), Skittering=Volatile(AoE)",
+  "Ardeos: NEVER Detonate with 0 DoTs. Stack SearingBlaze + EngulfingFlames first.",
+  "Helena: Never let Toughness drop below 40%. Shockwave gives double CDR from Veteran of War.",
+  "Vigour: Radiant Runes come from dealing damage. Never stop attacking to heal.",
+  "Meiko+Vigour is the meta Anchor comp. Highest ceiling for Eternal 26+ content.",
+  "Elarion: Mark → Barrage. MassGrip to cluster enemies for your AoE DPS.",
+  "Rime: Pre-spend Winter Orbs before IceAge fires to avoid overcapping Anima.",
+  "Tariq: LightningBolt proc must be used instantly. Never hold it.",
+  "Malevolence: Stacks reset after 20s. Alternate QF and AA to keep both charged.",
+  "Maiden of Death: 60s CD. Align with FinalStratagem for max burst impact."
+]
+
+let tipIdx = 0
+setInterval(() => {
+  document.getElementById('footerTip').textContent = TIPS[tipIdx % TIPS.length]
+  tipIdx++
+}, 8000)
+
+// ── DATA FETCH LOOP ───────────────────────────────────────────────
+async function fetchState() {
+  try {
+    const r = await fetch(STATE_FILE + '?t=' + Date.now(), { cache:'no-store' })
+    if (r.ok) {
+      state = await r.json()
+      updateUI(state)
+    }
+  } catch(e) {
+    // AHK not running yet — show demo mode
+    updateUI(getDemoState())
+  }
+}
+
+setInterval(fetchState, 100)
+fetchState()
+
+// ── DEMO STATE (while AHK not running) ────────────────────────────
+function getDemoState() {
+  const t = Date.now() / 1000
+  return {
+    energy: 120 + Math.sin(t * 0.8) * 60,
+    maxEnergy: 200,
+    cp: Math.floor(Math.abs(Math.sin(t * 0.3)) * 6),
+    broodingCharges: 2,
+    widowReady: true,
+    stealthState: 'NONE',
+    stealthWindowPct: 0,
+    lastPoison: '',
+    stealthNextAbility: '',
+    nextAbility: 'WidowsBite',
+    nextAbilityDamage: '—',
+    nextAbilityReason: 'Demo Mode — AHK not running',
+    nextAbilityCostEnergy: 0,
+    nextAbilityCostCP: 0,
+    nextAbilityIsFromStealth: false,
+    queue: ['WidowsBite','Backstab','QueensFang','Backstab','HemorrhagingStrike'],
+    isRunning: false,
+    rotationType: 'ST',
+    dps: 0,
+    totalDamage: 0,
+    totalCasts: 0,
+    rotationTime: 0,
+    guileWindows: 0,
+    stealthUses: 0,
+    energyWasted: 0,
+    seethingRemaining: 35,
+    seethingMax: 60,
+    volatileRemaining: 0,
+    volatileMax: 8,
+    hemRemaining: 12,
+    hemMax: 30,
+    maidenReady: true,
+    maidenActive: false,
+    maidenRemaining: 0,
+    maidenCD: 60,
+    guileActive: false,
+    guileRemaining: 0,
+    weaponReady: true,
+    weaponCD: 90,
+    weaponRemaining: 90,
+    finalReady: true,
+    finalCD: 180,
+    finalRemaining: 180,
+    deadlySchemeEnergy: 0,
+    deadlySchemeActive: false,
+    hemotoxinStacks: 0,
+    hemotoxinTimer: 0,
+    hemotoxinRemaining: 0,
+    qfStacks: 1,
+    qfRemaining: 15,
+    aaStacks: 0,
+    aaRemaining: 0,
+    activeHero: 'Mara',
+    party: ['Meiko','Vigour','Mara','Elarion'],
+  }
+}
+
+// ── MAIN UI UPDATE ────────────────────────────────────────────────
+function updateUI(s) {
+  if (!s) return
+  updateResources(s)
+  updateStealth(s)
+  updatePoisons(s)
+  updateAbilityPreview(s)
+  updateQueue(s)
+  updateBurst(s)
+  updateMalevolence(s)
+  updateMetrics(s)
+  updateHeader(s)
+  updateHeroPanel(s)
+  updateHemotoxin(s)
+}
+
+function updateResources(s) {
+  const energyPct = (s.energy / s.maxEnergy) * 100
+  const arcLen    = 283
+  const offset    = arcLen * (1 - energyPct / 100)
+
+  const arc = document.getElementById('energyArc')
+  const val = document.getElementById('energyValue')
+  const max = document.getElementById('energyMax')
+
+  arc.style.strokeDashoffset = offset
+  val.textContent = Math.round(s.energy)
+  max.textContent = `/ ${s.maxEnergy} ENERGY`
+
+  // Color classes
+  const cls = energyPct < 25 ? 'low' : energyPct < 60 ? 'medium' : ''
+  arc.className = 'arc-fill' + (cls ? ' '+cls : '')
+  val.className = 'arc-value' + (cls ? ' '+cls : '')
+  arc.setAttribute('stroke', cls ? `url(#energyGrad${cls === 'low' ? 'Low' : 'Mid'})` : 'url(#energyGrad)')
+
+  // CP pips
+  for (let i = 1; i <= 6; i++) {
+    const pip = document.getElementById('cp' + i)
+    if (i <= s.cp) {
+      pip.classList.add('active')
+      if (i > prevCP) pip.classList.add('pulse')
+      else pip.classList.remove('pulse')
+    } else {
+      pip.classList.remove('active','pulse')
+    }
+  }
+  prevCP = s.cp
+
+  // Brooding
+  document.getElementById('brood1').className = 'charge-dot' + (s.broodingCharges >= 1 ? ' active' : '')
+  document.getElementById('brood2').className = 'charge-dot' + (s.broodingCharges >= 2 ? ' active' : '')
+
+  // Widow
+  document.getElementById('widow1').className = 'charge-dot' + (s.widowReady ? ' active' : '')
+  document.getElementById('widow2').className = 'charge-dot active'
+}
+
+function updateStealth(s) {
+  const orb   = document.getElementById('stealthOrb')
+  const label = document.getElementById('stealthLabel')
+  const fill  = document.getElementById('stealthWindowFill')
+  const next  = document.getElementById('stealthNext')
+
+  orb.className = 'stealth-orb ' + (s.stealthState || 'none').toLowerCase()
+  label.className = 'stealth-state-label ' + (s.stealthState || 'none').toLowerCase()
+
+  switch(s.stealthState) {
+    case 'PENDING':
+      orb.textContent = '🕷️'
+      label.textContent = 'IN STEALTH'
+      fill.style.width = (s.stealthWindowPct || 0) + '%'
+      next.textContent = s.stealthNextAbility
+        ? '→ ' + (ABILITY_SHORT[s.stealthNextAbility] || s.stealthNextAbility)
+        : '→ Waiting...'
+      break
+    case 'CONSUMED':
+      orb.textContent = '✅'
+      label.textContent = 'CONSUMED'
+      fill.style.width = '100%'
+      next.textContent = s.lastPoison ? s.lastPoison + ' Poison applied' : '—'
+      break
+    default:
+      orb.textContent = '🕷️'
+      label.textContent = 'NOT IN STEALTH'
+      fill.style.width = '0%'
+      next.textContent = s.broodingCharges > 0 ? 'Charges ready' : 'No charges'
+  }
+}
+
+function updatePoisons(s) {
+  updatePoisonItem('seething', s.seethingRemaining, s.seethingMax || 60, 'seethingBar', 'seethingTime')
+  updatePoisonItem('volatile', s.volatileRemaining, s.volatileMax || 8,  'volatileBar', 'volatileTime')
+  updatePoisonItem('hemorrhage', s.hemRemaining,    s.hemMax || 30,     'hemBar',      'hemTime')
+}
+
+function updatePoisonItem(type, remaining, max, barId, timeId) {
+  const pct  = remaining > 0 ? Math.min(100, (remaining / max) * 100) : 0
+  const bar  = document.getElementById(barId)
+  const time = document.getElementById(timeId)
+  bar.style.width = pct + '%'
+  if (remaining > 0) {
+    time.textContent = Math.ceil(remaining) + 's'
+    time.className = 'poison-time active'
+  } else {
+    time.textContent = '—'
+    time.className = 'poison-time'
+  }
+}
+
+function updateAbilityPreview(s) {
+  const name  = s.nextAbility || ''
+  const icon  = ABILITY_ICONS[name] || '⚔️'
+  const short = ABILITY_SHORT[name] || name || 'Waiting...'
+
+  document.getElementById('abilityEmoji').textContent = icon
+  document.getElementById('abilityName').textContent  = short
+  document.getElementById('abilityDamage').textContent = s.nextAbilityDamage || '—'
+  document.getElementById('abilityReason').textContent = s.nextAbilityReason || '—'
+
+  // Stealth tag
+  const tag = document.getElementById('stealthTag')
+  if (s.nextAbilityIsFromStealth) {
+    tag.innerHTML = `<div class="stealth-tag">🌑 FROM STEALTH → ${s.lastPoison || '?'} POISON</div>`
+  } else {
+    tag.innerHTML = ''
+  }
+
+  // Cost badges
+  const costEl = document.getElementById('abilityCost')
+  let badges = ''
+  if (s.nextAbilityCostEnergy > 0)
+    badges += `<div class="cost-badge energy">${s.nextAbilityCostEnergy} Energy</div>`
+  if (s.nextAbilityCostCP > 0)
+    badges += `<div class="cost-badge cp">${s.nextAbilityCostCP} CP spent</div>`
+  if (!badges)
+    badges = `<div class="cost-badge free">Free</div>`
+  costEl.innerHTML = badges
+}
+
+function updateQueue(s) {
+  const track = document.getElementById('queueTrack')
+  const queue = s.queue || []
+  if (!queue.length) { track.innerHTML = '<span style="color:rgba(255,255,255,0.15);font-family:var(--font-mono);font-size:10px;padding:10px">No abilities queued</span>'; return }
+
+  track.innerHTML = queue.map((ab, i) => {
+    const icon  = ABILITY_ICONS[ab] || '⚔️'
+    const short = ABILITY_SHORT[ab] || ab
+    const arrow = i < queue.length - 1 ? '<div class="queue-arrow">›</div>' : ''
+    return `
+      <div class="queue-item">
+        <div class="queue-item-icon">${icon}</div>
+        <div class="queue-item-name">${short}</div>
+      </div>
+      ${arrow}
+    `
+  }).join('')
+}
+
+function updateBurst(s) {
+  // Maiden
+  if (s.maidenActive) {
+    setburst('maiden', 'active', `${s.maidenRemaining?.toFixed(1)}s`, 'active', (s.maidenRemaining/10)*100, 'var(--orange)')
+  } else if (s.maidenReady) {
+    setburst('maiden', 'ready', 'READY', 'ready', 100, 'var(--green)')
+  } else {
+    const cd = s.maidenCD || 60
+    const rem = s.maidenCDRemaining || 0
+    setburst('maiden', '', `${Math.ceil(rem)}s`, '', ((cd-rem)/cd)*100, 'rgba(255,255,255,0.1)')
+  }
+
+  // Guile
+  if (s.guileActive) {
+    setburst('guile', 'active', `⚡ ${s.guileRemaining?.toFixed(1)}s`, 'active', (s.guileRemaining/5)*100, 'var(--orange)')
+    if (!document.getElementById('burst-guile').dataset.alerted) {
+      showAlert('ASSASSIN\'S GUILE', 'SPAM FINISHERS — 5 SECOND WINDOW', 'guile')
+      document.getElementById('burst-guile').dataset.alerted = '1'
+    }
+  } else {
+    document.getElementById('burst-guile').dataset.alerted = ''
+    setburst('guile', '', 'Inactive', '', 0, 'var(--orange)')
+  }
+
+  // Weapon
+  setburst('weapon', s.weaponReady?'ready':'',
+    s.weaponReady ? 'READY' : `${Math.ceil(s.weaponCDRemaining||0)}s`,
+    s.weaponReady ? 'ready' : '', s.weaponReady ? 100 : ((s.weaponRemaining||0)/90)*100, 'var(--blue)')
+
+  // Final
+  setburst('final', s.finalReady?'ready':'',
+    s.finalReady ? '🔥 READY' : `${Math.ceil(s.finalCDRemaining||0)}s`,
+    s.finalReady ? 'crit' : '', s.finalReady ? 100 : ((s.finalRemaining||0)/180)*100, 'var(--red)')
+
+  // Deadly Scheme
+  if (s.deadlySchemeActive) {
+    setburst('scheme', 'ready', '💀 CRITS!', 'crit', 100, '#ff00ff')
+  } else {
+    const pct = ((s.deadlySchemeEnergy||0)/200)*100
+    setburst('scheme', '', `${Math.round(s.deadlySchemeEnergy||0)}/200`, '', pct, '#ff00ff')
+  }
+
+  // Hemo
+  if (s.hemotoxinStacks > 0) {
+    const pct = s.hemotoxinRemaining > 0 ? (s.hemotoxinRemaining/9)*100 : 0
+    setburst('hemo', s.hemotoxinRemaining < 3 ? 'active' : '',
+      `${s.hemotoxinStacks} stacks${s.hemotoxinRemaining > 0 ? ' · '+s.hemotoxinRemaining.toFixed(1)+'s' : ''}`,
+      s.hemotoxinRemaining < 3 ? 'crit' : '', pct, '#ff00ff')
+  } else {
+    setburst('hemo', '', '0 stacks', '', 0, '#ff00ff')
+  }
+}
+
+function setburst(id, cardClass, val, valClass, barPct, barColor) {
+  const card  = document.getElementById('burst-'+id)
+  const valEl = document.getElementById(id+'Val')
+  const barEl = document.getElementById(id+'Bar')
+  card.className  = 'burst-item' + (cardClass ? ' '+cardClass : '')
+  valEl.textContent = val
+  valEl.className = 'burst-value' + (valClass ? ' '+valClass : '')
+  barEl.style.width = Math.max(0, Math.min(100, barPct)) + '%'
+  barEl.style.background = barColor
+}
+
+function updateMalevolence(s) {
+  const qf = s.qfStacks || 0
+  const aa = s.aaStacks || 0
+
+  document.getElementById('qfStar1').className = 'mal-star' + (qf >= 1 ? ' active' : '')
+  document.getElementById('qfStar2').className = 'mal-star' + (qf >= 2 ? ' active' : '')
+  document.getElementById('aaStar1').className = 'mal-star' + (aa >= 1 ? ' active' : '')
+  document.getElementById('aaStar2').className = 'mal-star' + (aa >= 2 ? ' active' : '')
+
+  const qfPct = s.qfRemaining > 0 ? Math.min(100, (s.qfRemaining/20)*100) : 0
+  const aaPct = s.aaRemaining > 0 ? Math.min(100, (s.aaRemaining/20)*100) : 0
+  document.getElementById('qfBar').style.width = qfPct + '%'
+  document.getElementById('aaBar').style.width = aaPct + '%'
+  document.getElementById('qfMult').textContent = '×' + (1 + qf)
+  document.getElementById('aaMult').textContent = '×' + (1 + aa)
+}
+
+function updateMetrics(s) {
+  document.getElementById('metricDPS').textContent    = Math.round(s.dps || 0).toLocaleString()
+  document.getElementById('metricDmg').textContent    = Math.round(s.totalDamage || 0).toLocaleString() + ' dmg'
+  document.getElementById('metricCasts').textContent  = s.totalCasts || 0
+  document.getElementById('metricCPM').textContent    = s.rotationTime > 0
+    ? Math.round((s.totalCasts / s.rotationTime) * 60) + ' CPM' : '0 CPM'
+  document.getElementById('metricGuile').textContent  = s.guileWindows || 0
+  document.getElementById('metricStealth').textContent= (s.stealthUses || 0) + ' stealth uses'
+
+  const waste = s.energyWasted || 0
+  const casts = s.totalCasts || 1
+  const wastePct = Math.round(Math.min(99, waste / (casts * 10))) + '%'
+  document.getElementById('metricWaste').textContent      = wastePct
+  document.getElementById('metricEfficiency').textContent = 'Efficiency: ' + (100 - parseInt(wastePct)) + '%'
+}
+
+function updateHeader(s) {
+  const dps      = Math.round(s.dps || 0)
+  const dpsEl    = document.getElementById('dpsValue')
+  dpsEl.textContent = dps.toLocaleString() + ' DPS'
+  dpsEl.className = dps > 4000 ? 'dps-value' : dps > 3000 ? 'dps-value warn' : 'dps-value crit'
+
+  // Timer
+  const secs = Math.round(s.rotationTime || 0)
+  const m    = Math.floor(secs / 60)
+  const sec  = secs % 60
+  document.getElementById('timerDisplay').textContent = `${m}:${String(sec).padStart(2,'0')}`
+
+  // Status pill
+  const pill   = document.getElementById('statusPill')
+  const status = document.getElementById('statusText')
+  if (s.isRunning) {
+    pill.className = 'status-pill'
+    status.textContent = s.rotationType || 'LIVE'
+  } else {
+    pill.className = 'status-pill idle'
+    status.textContent = 'READY'
+  }
+}
+
+function updateHeroPanel(s) {
+  const hero = s.activeHero || 'Mara'
+
+  document.getElementById('activeHeroIcon').textContent = getHeroIcon(hero)
+  document.getElementById('activeHeroName').textContent = hero.toUpperCase()
+  document.getElementById('activeHeroRole').textContent = getHeroRoleLabel(hero)
+  document.getElementById('heroNotes').textContent = HERO_NOTES[hero] || ''
+
+  // All btn states
+  document.querySelectorAll('.hero-btn').forEach(b => b.classList.remove('active'))
+  const activeBtn = document.getElementById('btn-' + hero)
+  if (activeBtn) activeBtn.classList.add('active')
+
+  // Party
+  if (s.party && s.party.length) {
+    const pd = document.getElementById('partyDisplay')
+    pd.innerHTML = s.party.map(h =>
+      `<div class="party-member">
+        <span class="party-member-icon">${getHeroIcon(h)}</span>
+        <span class="party-member-name">${h}</span>
+        <span class="party-member-role">${getHeroRole(h)}</span>
+      </div>`
+    ).join('')
+  }
+}
+
+function updateHemotoxin(s) {
+  const warn   = document.getElementById('hemotoxinWarning')
+  const text   = document.getElementById('hemotoxinText')
+  const timer  = document.getElementById('hemotoxinTimer')
+  const stacks = s.hemotoxinStacks || 0
+
+  if (stacks > 0 && (s.hemotoxinRemaining || 0) > 0) {
+    warn.classList.add('visible')
+    if (s.hemotoxinRemaining < 2.5) warn.classList.add('panic')
+    else warn.classList.remove('panic')
+
+    text.textContent = stacks >= 4 ? '🚨 DETONATE NOW!' : `HEMOTOXIN · ${stacks} STACKS`
+    timer.textContent = s.hemotoxinRemaining?.toFixed(1) + 's'
+
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('hd'+i).className = 'hemo-dot' + (i <= stacks ? ' active' : '')
+    }
+  } else {
+    warn.classList.remove('visible','panic')
+  }
+}
+
+// ── ALERT SYSTEM ─────────────────────────────────────────────────
+function showAlert(title, sub, type) {
+  const overlay = document.getElementById('alertOverlay')
+  document.getElementById('alertTitle').textContent = title
+  document.getElementById('alertSub').textContent   = sub
+  overlay.className = 'alert-overlay visible ' + (type || '')
+  clearTimeout(alertTimer)
+  alertTimer = setTimeout(() => overlay.classList.remove('visible'), 4000)
+}
+
+// Watch for Maiden activation
+let prevMaidenActive = false
+setInterval(() => {
+  if (state.maidenActive && !prevMaidenActive) {
+    showAlert('MAIDEN OF DEATH', '+20% DMG · ALL BUILDERS = 6 CP · +20% ENERGY REGEN', 'maiden')
+  }
+  prevMaidenActive = state.maidenActive
+}, 100)
+
+// ── HERO SELECTOR ─────────────────────────────────────────────────
+function selectHero(heroName) {
+  sendCmd('HERO:' + heroName)
+  // Optimistic update
+  document.querySelectorAll('.hero-btn').forEach(b => b.classList.remove('active'))
+  const btn = document.getElementById('btn-' + heroName)
+  if (btn) btn.classList.add('active')
+  document.getElementById('activeHeroIcon').textContent = getHeroIcon(heroName)
+  document.getElementById('activeHeroName').textContent = heroName.toUpperCase()
+  document.getElementById('activeHeroRole').textContent = getHeroRoleLabel(heroName)
+  document.getElementById('heroNotes').textContent = HERO_NOTES[heroName] || ''
+}
+
+// ── COMMAND SENDER ────────────────────────────────────────────────
+function sendCmd(cmd) {
+  // Writes to fellowship_cmd.txt — AHK polls this every 100ms
+  try {
+    fetch(CMD_FILE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: cmd
+    }).catch(() => {})
+  } catch(e) {}
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────
+function getHeroIcon(h) {
+  const m = {Helena:'🛡️',Meiko:'🥋',Xavian:'✨',Sylvie:'🦋',Vigour:'⚡',
+             Aeona:'🌟',Mara:'🕷️',Ardeos:'🔥',Rime:'❄️',Tariq:'⚡',Elarion:'🏹'}
+  return m[h] || '❓'
+}
+
+function getHeroRole(h) {
+  if (['Helena','Meiko','Xavian'].includes(h)) return 'Tank'
+  if (['Sylvie','Vigour','Aeona'].includes(h)) return 'Healer'
+  return 'DPS'
+}
+
+function getHeroRoleLabel(h) {
+  const roles = {
+    Helena:'Tank · Warmaster', Meiko:'Tank · Martial Artist', Xavian:'Tank · Paladin',
+    Sylvie:'Healer · Naturalist', Vigour:'Healer · Battle Priest', Aeona:'Healer · Arcane',
+    Mara:'DPS · Assassin', Ardeos:'DPS · Fire Mage', Rime:'DPS · Frost Mage',
+    Tariq:'DPS · Berserker', Elarion:'DPS · Marksman'
+  }
+  return roles[h] || 'Hero'
+}
+</script>
+</body>
+</html>
