@@ -914,10 +914,15 @@ UseAbility(ability) {
 
         ; Damage estimation
         agility     := PlayerStats["Agility"]
-        baseDmgPct  := (ability = "QueensFang") ? 1.60
-                     : (ability = "ArachnidAssault") ? 0.65
-                     : (ability = "HemorrhagingStrike") ? 1.75
-                     : 1.0
+        if ability = "QueensFang" {
+            baseDmgPct := 1.60
+        } else if ability = "ArachnidAssault" {
+            baseDmgPct := 0.65
+        } else if ability = "HemorrhagingStrike" {
+            baseDmgPct := 1.75
+        } else {
+            baseDmgPct := 1.0
+        }
 
         cpBonus     := 0.20 * spentCP    ; +20% per CP (all 3 finishers scale identically)
         baseDmg     := agility * (baseDmgPct + cpBonus)
@@ -1920,10 +1925,15 @@ UpdateAbilityPreview() {
     ; Damage estimate for finishers
     if AbilityData.Has(nextAbility) && AbilityData[nextAbility].isFinisher {
         agility    := PlayerStats["Agility"]
-        basePct    := (nextAbility = "QueensFang")         ? 1.60
-                    : (nextAbility = "ArachnidAssault")    ? 0.65
-                    : (nextAbility = "HemorrhagingStrike") ? 1.75
-                    : 1.0
+        if nextAbility = "QueensFang" {
+            basePct := 1.60
+        } else if nextAbility = "ArachnidAssault" {
+            basePct := 0.65
+        } else if nextAbility = "HemorrhagingStrike" {
+            basePct := 1.75
+        } else {
+            basePct := 1.0
+        }
         cpBonus    := 0.20 * CurrentCP
         baseDmg    := agility * (basePct + cpBonus)
 
@@ -1942,9 +1952,12 @@ UpdateAbilityPreview() {
             mults.Push("CRIT ×2")
         }
         if Talents["Malevolence"] {
-            stacks := (nextAbility = "QueensFang")      ? MalevolenceStacks["QueensFang"]
-                    : (nextAbility = "ArachnidAssault") ? MalevolenceStacks["ArachnidAssault"]
-                    : 0
+            stacks := 0
+            if nextAbility = "QueensFang" {
+                stacks := MalevolenceStacks["QueensFang"]
+            } else if nextAbility = "ArachnidAssault" {
+                stacks := MalevolenceStacks["ArachnidAssault"]
+            }
             if stacks > 0 {
                 totalM *= (1.0 + stacks)
                 mults.Push("Mal ×" (1 + stacks))
@@ -3537,10 +3550,15 @@ BuildStateJSON() {
         costEnergy := d.energyCost
         if d.isFinisher {
             costCP     := CurrentCP
-            basePct    := (nextAb = "QueensFang")         ? 1.60
-                        : (nextAb = "ArachnidAssault")    ? 0.65
-                        : (nextAb = "HemorrhagingStrike") ? 1.75
-                        : 1.0
+            if nextAb = "QueensFang" {
+                basePct := 1.60
+            } else if nextAb = "ArachnidAssault" {
+                basePct := 0.65
+            } else if nextAb = "HemorrhagingStrike" {
+                basePct := 1.75
+            } else {
+                basePct := 1.0
+            }
             cpBonus    := 0.20 * CurrentCP
             baseDmg    := PlayerStats["Agility"] * (basePct + cpBonus)
             totalM     := 1.0
@@ -3548,10 +3566,15 @@ BuildStateJSON() {
             if IsBuffActive("Maiden")         { totalM *= 1.2 }
             if IsBuffActive("DeadlyScheme")   { totalM *= 2.0 }
             if Talents["Malevolence"] {
-                stacks := (nextAb = "QueensFang") ? MalevolenceStacks["QueensFang"]
-                        : (nextAb = "ArachnidAssault") ? MalevolenceStacks["ArachnidAssault"]
-                        : 0
-                if stacks > 0 { totalM *= (1.0 + stacks) }
+                stacks := 0
+                if nextAb = "QueensFang" {
+                    stacks := MalevolenceStacks["QueensFang"]
+                } else if nextAb = "ArachnidAssault" {
+                    stacks := MalevolenceStacks["ArachnidAssault"]
+                }
+                if stacks > 0 {
+                    totalM *= (1.0 + stacks)
+                }
             }
             nextDmg := "~" Round(baseDmg * totalM)
         }
