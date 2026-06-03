@@ -3414,6 +3414,33 @@ UpdateHemotoxinDisplay() {
 }
 
 
+; ── Rotating tip status bar ───────────────────────────────────────────────
+global StatusTipIndex := 1
+global StatusTips := [
+    "Seething Poison = +40% Energy Regen (Predator's Rush). Never let it drop.",
+    "Assassin's Guile: 5s window — fit 4 finishers. Spam Queen's Fang!",
+    "Brooding from stealth: Widow's Bite=Seething, Backstab=Caustic(6CP), Skittering=Volatile",
+    "Ardeos: NEVER Detonate with 0 DoTs active. Stack SearingBlaze first.",
+    "Helena: Keep Toughness above 75% for max damage reduction.",
+    "Vigour: Deal damage to generate Runes. Never stop attacking.",
+    "Meiko+Vigour is the meta Anchor comp. Helena+Vigour for safe climbs.",
+    "Elarion: Apply LunarlightMark FIRST, then HeartseekerBarrage to trigger.",
+    "Rime: Pre-spend Winter Orbs before IceAge to avoid overcapping.",
+    "Tariq: LightningBolt proc = instant use, never delay it.",
+    "Malevolence stacks reset after 20s. Alternate QF/AA to maintain both.",
+    "Maiden of Death: 60s CD (fixed from old 90s). Align with FinalStratagem."
+]
+
+UpdateStatusTip() {
+    global StatusTipIndex, StatusTips, UIControls
+    if !UIControls.Has("StatusTip") {
+        return
+    }
+    UIControls["StatusTip"].Value := StatusTips[StatusTipIndex]
+    StatusTipIndex := Mod(StatusTipIndex, StatusTips.Length) + 1
+}
+
+
 F1:: StartRotation("ST")
 F2:: StartRotation("AOE")
 F3:: PauseRotation()
